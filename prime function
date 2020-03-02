@@ -1,0 +1,42 @@
+#include<stdio.h>
+int main() {
+	int n,m,i,j,k,min,a1,a2,a3;
+	int dis[10][10],bian[10],dian[10] = {0};
+	int thisp =100000 ;
+	int flag = 0,sum = 0;
+	scanf("%d %d",&n,&m);
+	for(int i = 1; i <= n; i++)
+		for(int j = 1; j <= n; j++)
+			if(i == j)
+				dis[i][j] = 0;
+			else
+				dis[i][j] = thisp;//写入边的权值 
+	for(int i = 1; i <= m; i++) {
+		scanf("%d %d %d",&a1,&a2,&a3);
+		dis[a1][a2] = a3;
+		dis[a2][a1] = a3;
+	}
+	for(int i = 1; i <= n; i++)
+		bian[i] = dis[1][i];
+	dian[1] = 1;//dian数组记录入树情况 
+	flag++;
+	while(flag < n) {
+		min = thisp;
+		//找到相连的权值最小点 
+		for(int i = 1; i <= n; i++) {
+			if(dian[i] == 0 && min > bian[i]) { 
+				min = bian[i];
+				j = i;
+			}
+		}
+		dian[j] = 1;//将循环中的权值最小边赋值并记录 
+		flag++;
+		sum += bian[j];//将min权值相+ 
+		for(k = 1; k <= n; k++) {
+			if(dian[k] == 0 && bian[k] > dis[j][k])
+				bian[k] = dis[j][k];//找到距离其最近的点 
+		}
+	}
+	printf("%d",sum);
+	return 0;
+}
